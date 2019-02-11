@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>CanvasForPikabu</title>
+    </meta>
+</head>
+
+<body>
+    <canvas id="canvas" width="700" height="500"></canvas>
+    <button id="decodebtn">decodebtn</button>
+    <button id="invertbtn">invertbtn</button>
+    <button id="grayscalebtn">grayscalebtn</button>
+
+    <script type="text/javascript">
+        var img = new Image();
+        img.src = '154800137443598227.png';
+        img.onload = function() {
+            draw(this);
+        };
+
+        function draw(img) {
+            var canvas = document.getElementById('canvas');
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0);
+            img.style.display = 'none';
+            // var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var imageData = ctx.getImageData(0, 0, img.width, img.height);
+            var data = imageData.data;
+            console.log(img.width +" "+ img.height);
+            console.log(data);
+            console.log(data.length);
+
+            var invert = function() {
+                for (var i = 0; i < data.length; i += 4) {
+                    data[i] = 255 - data[i]; // red
+                    data[i + 1] = 255 - data[i + 1]; // green
+                    data[i + 2] = 255 - data[i + 2]; // blue
+                }
+                ctx.putImageData(imageData, 0, 0);
+            };
+
+            var grayscale = function() {
+                for (var i = 0; i < data.length; i += 4) {
+                    var avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                    data[i] = avg; // red
+                    data[i + 1] = avg; // green
+                    data[i + 2] = avg; // blue
+                }
+                ctx.putImageData(imageData, 0, 0);
+            };
+
+            var decode = function() {
+            /*
+            19. Секретный агент Пикабу передал зашифрованное изображение. Вам необходимо расшифровать изображение и вывести его на страницу средствами JS (без сторонних библиотек). Алгоритм дешифрования известен:
+
+            пиксели перебираются слева направо для каждой строки;
+            для каждого пикселя вычисляется параметр s += x + y * 80 (изначально s = 0 и для каждого следующего пикселя значение увеличивается на x + y * 80), где x - колонка пикселя, y - строка;
+            для канала красного и синего цвета необходимо добавить параметр s;
+            для канала зеленого цвета необходимо отнять параметр s следующим образом: green = (green - s) & 0xff;
+
+            Зашифрованное изображение (чтобы избежать проблемы с CORS изображение лучше скачать себе на локальный сервер):
+            */
+            /*
+                Основу взял с https://developer.mozilla.org/ru/docs/Web/API/CanvasRenderingContext2D/drawImage
+            */
+                var y = 0;
+                var x = 0;
+                var s = 0;
+                for (var i = 0; i < data.length; i += 4) 
+                {
+                    ++x;
+                    if (x >= img.width) {
+                        ++y;
+                        // console.log(x +" "+ y);
+                        x = 0;
+                    }
+
+                    data[i] = data[i] + s; // red
+                    data[i + 1] = (data[i + 1] - s) & 0xff;// green
+                    data[i + 2] = data[i + 2] + s; // blue
+                    s += x + y * 80;
+                }
+                ctx.putImageData(imageData, 0, 0);
+            };
+
+            var decodebtn = document.getElementById('decodebtn');
+            decodebtn.addEventListener('click', decode);
+
+            var invertbtn = document.getElementById('invertbtn');
+            invertbtn.addEventListener('click', invert);
+
+            var grayscalebtn = document.getElementById('grayscalebtn');
+            grayscalebtn.addEventListener('click', grayscale);
+
+
+        }
+    </script>
+</body>
+
+</html>

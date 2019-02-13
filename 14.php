@@ -9,7 +9,7 @@ function hasCollision(array $circle, array $circlesLists): bool
 {
     define("CENTER_CIRCLE_X", $circle[0]);
     define("CENTER_CIRCLE_Y", $circle[1]);
-    define("CENTER_CIRCLE_R", $circle[2]);
+    define("CIRCLE_RADIUS", $circle[2]);
 
     foreach ($circlesLists as $circleList) {
         // приравниваем тестируемую окружность к началу координат
@@ -20,7 +20,7 @@ function hasCollision(array $circle, array $circlesLists): bool
         // вычисляем расстояние между центрами окружностей, равное гипотенузе
         $dr = sqrt(pow($x, 2) + pow($y, 2));
         // если сумма радиусов больше расстояния между центрами - окрудности пересекаются
-        if ((CENTER_CIRCLE_R + $r) >= $dr) {
+        if ((CIRCLE_RADIUS + $r) >= $dr) {
             echo "Пересечение окружностей найдено!";
         }
     }

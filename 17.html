@@ -5,82 +5,73 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <style type="text/css">
-    /* пытался сделать на селекторах, не получилось */
-    .button {
-        display: block;
+    .circle {
+        width: 50px;
+        height: 50px;
+        margin: 100px auto;
     }
 
-    .button input[type="checkbox"] {
-        /* display: none; */
-    }
-
-    .button label[for="check1"]::before {
-        content: "4";
+    .circle input[type="checkbox"] {
         display: none;
     }
 
-    .button label[for="check1"]::after {
-        content: "2";
+    .circle label[for="check1"]::before,
+    .circle label[for="check1"]::after,
+    .circle label[for="check2"]::before,
+    .circle label[for="check2"]::after {
+        position: absolute;
         display: none;
-    }
-
-    .button label[for="check2"]::before {
-        content: "3";
-        display: none;
-    }
-
-    .button label[for="check2"]::after {
-        content: "1";
-        display: none;
-    }
-
-    #check1:not(:checked)~label[for="check1"]::before {
-        display: inline-block;
-    }
-
-    #check1:checked~label[for="check1"]::before {
-        display: none;
-    }
-
-    #check1:checked~label[for="check1"]::after {
-        display: inline-block;
-    }
-
-    #check2:not(:checked)~label[for="check2"]::before {
-        display: inline-block;
-    }
-
-    #check2:checked~label[for="check2"]::before {
-        display: none;
-    }
-
-    #check2:checked~label[for="check2"]::after {
-        display: inline-block;
-    }
-
-    .button label {
-        position: relative;
-        font-size: 50px;
-    }
-
-    .button label::before,
-    .button label::after {
-        /* position: absolute; */
-        display: inline-block;
+        width: 50px;
+        height: 50px;
+        font-size: 40px;
+        text-align: center;
+        background: wheat;
+        border: 2px black solid;
+        border-radius: 50%;
         cursor: pointer;
+    }
+
+    .circle label[for="check1"]::before {
+        content: "2";
+        z-index: 2;
+    }
+
+    .circle label[for="check1"]::after {
+        content: "4";
+        z-index: 4;
+    }
+
+    .circle label[for="check2"]::before {
+        content: "1";
+        z-index: 1;
+    }
+
+    .circle label[for="check2"]::after {
+        content: "3";
+        z-index: 3;
+    }
+
+    #check1:checked~label[for="check1"]::before,
+    #check2:checked~label[for="check2"]::before,
+    #check1:not(:checked)~label[for="check1"]::after,
+    #check2:not(:checked)~label[for="check2"]::after {
+        display: inline-block;
+    }
+
+    #check2:checked~label[for="check1"]::after {
+        display: none;
     }
     </style>
 </head>
 
 <body>
     <!--  - 17. Дан фрагмент HTML, для которого нужно написать стили CSS (допускается LESS или SASS). Итоговый HTML должен выглядеть как на картинке ниже: круг и внутри цифра. Однако не все так просто: изначально в кружке печатается цифра 4, но если кликнуть на кружок, то цифра в нем должна уменьшается на 1. Если кликнуть по кружку, когда в нем цифра 1, то цифра сбрасывается до 4. Необходимо описать такой внешний вид и поведение, используя только стили CSS (LESS/SASS). HTML менять нельзя, применять JS и прочие языки также не допускается. -->
-    <div class="button">
+    <div class="circle">
         <input id="check1" type="checkbox">
         <input id="check2" type="checkbox">
         <label for="check1"></label>
         <label for="check2"></label>
     </div>
-    
 </body>
 
 </html>
